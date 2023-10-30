@@ -11,7 +11,9 @@ pub enum State {
     Start,
     Sorted,
     Selected,
+    NotRepeated,
     Swapped,
+    Back,
     Repeated,
     Done,
 }
@@ -173,7 +175,7 @@ fn ui(frame: &mut Frame, app: &App) {
             } else if i == app.selected().selected || i == app.selected().swap_idx {
                 Style::default().fg(Color::Red)
             } else {
-                Style::default().fg(Color::White)
+                Style::default().fg(Color::Blue)
             };
             c.to_string().set_style(style)
         })
@@ -181,14 +183,19 @@ fn ui(frame: &mut Frame, app: &App) {
     let paragraph = Paragraph::new(Line::from(t)).block(block);
     frame.render_widget(paragraph, chunks[0]);
     let block = Block::default().title("Status").borders(Borders::ALL);
-    let paragraph = Paragraph::new(match app.selected().state {
-        State::Start => "Start",
-        State::Sorted => "Sorted",
-        State::Selected => "Selected",
-        State::Swapped => "Swapped",
-        State::Repeated => "Repeated",
-        State::Done => "Done",
-    })
+    let paragraph = Paragraph::new(vec![
+        Line::from(match app.selected().state {
+            State::Start => "Start",
+            State::Sorted => "Sorted",
+            State::NotRepeated => "First not Repeated",
+            State::Selected => "Selected",
+            State::Swapped => "Swapped and Enter recursion",
+            State::Repeated => "Repeated",
+            State::Back => "Exit recursion",
+            State::Done => "Done",
+        }),
+        Line::from(format!("Count: {}", alllen)),
+    ])
     .block(block);
     frame.render_widget(paragraph, chunks[1]);
     let paragraph = Paragraph::new(Line::from(vec![
@@ -196,8 +203,13 @@ fn ui(frame: &mut Frame, app: &App) {
         ": selected | ".into(),
         "Red".red(),
         ": swap | ".into(),
-        "White".white(),
-        ": unselected".into(),
+        "White".blue(),
+        ": unselected | ".into(),
+        "Down: next | ".into(),
+        "Up: prev | ".into(),
+        "Shift + Down: skip 1 forward | ".into(),
+        "Shift + Up: skip 1 backward | ".into(),
+        "q: quit".into(),
     ]))
     .block(Block::default().title("Help").borders(Borders::ALL));
     frame.render_widget(paragraph, chunks[2]);

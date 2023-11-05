@@ -1,0 +1,16 @@
+[package]
+name = "chat"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bytes = "1.5.0"
+crossterm = "0.27.0"
+ratatui = "0.24.0"
+reqwest = { version = "0.11.22", features = ["json"] }
+rocket = { version = "0.5.0-rc.3", features = ["json"] }
+serde = { version = "1.0.189", features = ["derive"] }
+tokio = { version = "1.33.0", features = ["full"] }
+tui-input = "0.8.0"

@@ -102,6 +102,10 @@ impl Ui {
                                                     file: content.into_bytes(),
                                                 },
                                             );
+                                            self.state
+                                                .list
+                                                .update(self.state.selected)
+                                                .push_self(msg.data.to_string());
                                             self.tx.send(Json::from(msg)).await.expect("can send");
                                         }
                                     } else {

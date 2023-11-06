@@ -8,7 +8,9 @@ impl ToString for Data {
     fn to_string(&self) -> String {
         match self {
             Data::Text(s) => s.clone(),
-            Data::File { filename, file } => format!("{}: {}", filename, file.len()),
+            Data::File { filename, file } => {
+                format!("file{{name: {filename}, size: {}}}", file.len())
+            }
         }
     }
 }
